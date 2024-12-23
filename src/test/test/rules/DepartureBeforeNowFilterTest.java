@@ -12,6 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 import static com.gridnine.testing.FlightBuilder.createFlight;
 import static org.junit.Assert.assertEquals;
 

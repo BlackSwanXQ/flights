@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 /**
  * Filter class for flights that have been on the ground for more than two hours.
  */
