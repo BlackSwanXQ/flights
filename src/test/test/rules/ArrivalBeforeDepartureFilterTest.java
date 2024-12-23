@@ -11,6 +11,7 @@ import java.util.*;
 import static com.gridnine.testing.FlightBuilder.createFlight;
 import static org.junit.Assert.assertEquals;
 
+
 public class ArrivalBeforeDepartureFilterTest {
 
     @Test

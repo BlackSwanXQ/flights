@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+
 import static com.gridnine.testing.FlightBuilder.createFlight;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

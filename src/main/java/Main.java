@@ -6,6 +6,7 @@ import rules.DepartureBeforeNowFilter;
 import applyfilter.FlightFilterApplier;
 import rules.GroundTimeExceedsTwoHoursFilter;
 
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
