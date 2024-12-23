@@ -70,4 +70,5 @@ public class ArrivalBeforeDepartureFilterTest {
         List<Flight> filteredFlights = new ArrivalBeforeDepartureFilter().filter(flights);
         assertEquals(Collections.emptyList(), filteredFlights);
     }
+
 }
