@@ -6,7 +6,6 @@ import rules.DepartureBeforeNowFilter;
 import applyfilter.FlightFilterApplier;
 import rules.GroundTimeExceedsTwoHoursFilter;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,23 +18,17 @@ public class Main {
         System.out.println("Original list of flights:");
         flights.forEach(System.out::println);
 
-        System.out.println("\nFlights filtered by departure before now:");
+        System.out.println("\nList of flights without departure before now:");
         List<Flight> filteredByDeparture = FlightFilterApplier.applyFilter(flights, new DepartureBeforeNowFilter());
         filteredByDeparture.forEach(System.out::println);
 
-        System.out.println("\nFlights filtered by arrival before departure:");
+        System.out.println("\nList of flights without arrival before departure:");
         List<Flight> filteredByArrival = FlightFilterApplier.applyFilter(flights, new ArrivalBeforeDepartureFilter());
         filteredByArrival.forEach(System.out::println);
 
-        System.out.println("\nFlights filtered by ground time exceeds two hours:");
+
+        System.out.println("\nList of flights without ground time exceeds two hours:");
         List<Flight> filteredByGroundTime = FlightFilterApplier.applyFilter(flights, new GroundTimeExceedsTwoHoursFilter());
         filteredByGroundTime.forEach(System.out::println);
-
-        System.out.println("\nThe filtered list");
-        List<List<Flight>> flightFiltered = List.of(filteredByDeparture,
-                filteredByArrival,
-                filteredByGroundTime);
-        List<Flight> listFiltered = FlightFilterApplier.listFilter(flights, flightFiltered);
-        listFiltered.forEach(System.out::println);
     }
 }

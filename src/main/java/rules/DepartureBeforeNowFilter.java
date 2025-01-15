@@ -8,7 +8,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 /**
  * Filter class for flights that have departed so far.
  */
@@ -18,7 +17,7 @@ public class DepartureBeforeNowFilter implements FlightFilter {
         LocalDateTime now = LocalDateTime.now();
         return flights.stream()
                 .filter(flight -> flight.getSegments().stream()
-                        .anyMatch(segment -> segment.getDepartureDate().isBefore(now.truncatedTo(ChronoUnit.MINUTES))))
+                        .noneMatch(segment -> segment.getDepartureDate().isBefore(now)))
                 .collect(Collectors.toList());
     }
 }

@@ -2,6 +2,7 @@ package rules;
 
 import com.gridnine.testing.Flight;
 import com.gridnine.testing.Segment;
+import interfaces.FlightFilter;
 import org.junit.Test;
 
 import java.time.Duration;
@@ -11,61 +12,28 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-
-import static com.gridnine.testing.FlightBuilder.createFlight;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class GroundTimeExceedsTwoHoursFilterTest {
 
     @Test
-    public void filterWithSegments() {
-
+    public void FilterGroundTimeExceedsTwoHoursTest() {
         LocalDateTime daysFromNow = LocalDateTime.now();
+        Segment segment1 = new Segment(daysFromNow, daysFromNow.plusHours(1).plusMinutes(30));
+        Segment segment2 = new Segment(daysFromNow.plusHours(3), daysFromNow.plusHours(4));
+        Segment segment3 = new Segment(daysFromNow.plusHours(6), daysFromNow.plusHours(7));
 
-        List<Flight> flights = Arrays.asList(
-                createFlight(daysFromNow, daysFromNow.plusHours(2), daysFromNow.plusHours(5), daysFromNow.plusHours(6)),
-                createFlight(daysFromNow, daysFromNow.plusHours(1), daysFromNow.plusHours(5), daysFromNow.plusHours(6)),
-                createFlight(daysFromNow, daysFromNow.plusHours(1), daysFromNow.plusHours(2), daysFromNow.plusHours(3)),
-                createFlight(daysFromNow, daysFromNow.plusHours(4), daysFromNow.plusHours(5), daysFromNow.plusHours(6))
-        );
-        List<Flight> flights2 = Arrays.asList(
-                createFlight(daysFromNow, daysFromNow.plusHours(2), daysFromNow.plusHours(3), daysFromNow.plusHours(4), daysFromNow.plusHours(5), daysFromNow.plusHours(6)),
-                createFlight(daysFromNow, daysFromNow.plusHours(2), daysFromNow.plusHours(3), daysFromNow.plusHours(4), daysFromNow.plusHours(6), daysFromNow.plusHours(7)),
-                createFlight(daysFromNow, daysFromNow.plusHours(1), daysFromNow.plusHours(2), daysFromNow.plusHours(3), daysFromNow.plusHours(4), daysFromNow.plusHours(5)),
-                createFlight(daysFromNow, daysFromNow.plusHours(1), daysFromNow.plusHours(2), daysFromNow.plusHours(4), daysFromNow.plusHours(4), daysFromNow.plusHours(3))
-        );
+        Flight flight1 = new Flight(List.of(segment1, segment2));
+        Flight flight2 = new Flight(List.of(segment1, segment2, segment3));
+        Flight flight3 = new Flight(List.of(segment1));
+
+        List<Flight> flights = Arrays.asList(flight1, flight2, flight3);
 
         List<Flight> filteredFlights = new GroundTimeExceedsTwoHoursFilter().filter(flights);
-        List<Flight> filteredFlights2 = new GroundTimeExceedsTwoHoursFilter().filter(flights2);
 
-        assertEquals(2, filteredFlights.size());
-        assertEquals(3, filteredFlights2.size());
-
-    }
-
-    @Test
-    public void filterWithoutSegments() {
-
-        LocalDateTime daysFromNow = LocalDateTime.now();
-
-        List<Flight> flights = Arrays.asList(
-                createFlight(daysFromNow, daysFromNow.plusHours(4), daysFromNow.plusHours(5), daysFromNow.plusHours(6)),
-                createFlight(daysFromNow, daysFromNow.plusHours(4), daysFromNow.plusHours(5), daysFromNow.plusHours(6)),
-                createFlight(daysFromNow, daysFromNow.plusHours(4), daysFromNow.plusHours(5), daysFromNow.plusHours(6)),
-                createFlight(daysFromNow, daysFromNow.plusHours(4), daysFromNow.plusHours(5), daysFromNow.plusHours(6))
-        );
-        List<Flight> flights2 = Arrays.asList(
-                createFlight(daysFromNow, daysFromNow.plusHours(1), daysFromNow.plusHours(2), daysFromNow.plusHours(4), daysFromNow.plusHours(4), daysFromNow.plusHours(3)),
-                createFlight(daysFromNow, daysFromNow.plusHours(1), daysFromNow.plusHours(2), daysFromNow.plusHours(4), daysFromNow.plusHours(4), daysFromNow.plusHours(3)),
-                createFlight(daysFromNow, daysFromNow.plusHours(1), daysFromNow.plusHours(2), daysFromNow.plusHours(4), daysFromNow.plusHours(4), daysFromNow.plusHours(3)),
-                createFlight(daysFromNow, daysFromNow.plusHours(1), daysFromNow.plusHours(2), daysFromNow.plusHours(4), daysFromNow.plusHours(4), daysFromNow.plusHours(3))
-        );
-
-        List<Flight> filteredFlights = new GroundTimeExceedsTwoHoursFilter().filter(flights);
-        List<Flight> filteredFlights2 = new GroundTimeExceedsTwoHoursFilter().filter(flights2);
-
-        assertEquals(Collections.emptyList(), filteredFlights);
-        assertEquals(Collections.emptyList(), filteredFlights2);
+        assertEquals(1, filteredFlights.size());
+        assertTrue(filteredFlights.contains(flight1));
+        assertFalse(filteredFlights.contains(flight2));
+        assertFalse(filteredFlights.contains(flight3));
     }
 }

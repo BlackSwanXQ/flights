@@ -4,13 +4,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-
 /**
  * Bean that represents a flight segment.
  */
 public class Segment {
     private final LocalDateTime departureDate;
-
     private final LocalDateTime arrivalDate;
 
     public Segment(final LocalDateTime dep, final LocalDateTime arr) {
