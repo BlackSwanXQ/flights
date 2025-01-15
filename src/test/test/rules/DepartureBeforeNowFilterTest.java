@@ -12,67 +12,30 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.gridnine.testing.FlightBuilder.createFlight;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+
 
 public class DepartureBeforeNowFilterTest {
 
     @Test
-    public void filterWithSegments() {
-
-        Random random = new Random();
-        List<Flight> flights = generateRandomFlights(random, 5);
-        List<Flight> filteredFlights = new DepartureBeforeNowFilter().filter(flights);
-
-        List<Flight> expectedFilteredFlights = new ArrayList<>();
-        for (Flight flight : flights) {
-            for (Segment segment : flight.getSegments()) {
-                if (segment.getDepartureDate().isBefore(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES))) {
-                    expectedFilteredFlights.add(flight);
-                    break;
-                }
-            }
-        }
-
-        assertEquals(expectedFilteredFlights, filteredFlights);
-    }
-
-    private List<Flight> generateRandomFlights(Random random, int count) {
-        List<Flight> flights = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            flights.add(generateRandomFlight(random));
-        }
-        return flights;
-    }
-
-    private Flight generateRandomFlight(Random random) {
-        int segmentCount = random.nextInt(1) + 1;
-        List<Segment> segments = new ArrayList<>();
-        for (int i = 0; i < segmentCount; i++) {
-            segments.add(generateRandomSegment(random));
-        }
-        return new Flight(segments);
-    }
-
-    private Segment generateRandomSegment(Random random) {
-        LocalDateTime departureDate = LocalDateTime.now().plusDays(random.nextInt(11) - 5);
-        LocalDateTime arrivalDate = LocalDateTime.now().plusDays(random.nextInt(5) + 1);
-        return new Segment(departureDate, arrivalDate);
-    }
-
-    @Test
-    public void filterWithoutSegments() {
+    public void FilterDepartureBeforeNowFilterTest() {
 
         LocalDateTime daysFromNow = LocalDateTime.now();
-        List<Flight> flights = Arrays.asList(
-                createFlight(daysFromNow.plusDays(1), daysFromNow.plusDays(2)),
-                createFlight(daysFromNow.plusDays(1), daysFromNow.plusDays(2)),
-                createFlight(daysFromNow.plusDays(1), daysFromNow.plusDays(2)),
-                createFlight(daysFromNow.plusDays(1), daysFromNow.plusDays(2))
-        );
+        Segment segment1 = new Segment(daysFromNow.plusMinutes(30), daysFromNow.plusHours(1));
+        Segment segment2 = new Segment(daysFromNow.minusHours(1), daysFromNow.plusHours(4));
+        Segment segment3 = new Segment(daysFromNow.plusHours(6), daysFromNow.plusHours(7));
+
+        Flight flight1 = new Flight(List.of(segment1, segment2, segment3));
+        Flight flight2 = new Flight(List.of(segment1, segment3));
+        Flight flight3 = new Flight(List.of(segment3));
+
+        List<Flight> flights = Arrays.asList(flight1, flight2, flight3);
 
         List<Flight> filteredFlights = new DepartureBeforeNowFilter().filter(flights);
 
-        assertEquals(Collections.emptyList(), filteredFlights);
+        assertEquals(2, filteredFlights.size());
+        assertFalse(filteredFlights.contains(flight1));
+        assertTrue(filteredFlights.contains(flight2));
+        assertTrue(filteredFlights.contains(flight3));
     }
 }

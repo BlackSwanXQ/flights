@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 /**
  * Filter class for flights that have been on the ground for more than two hours.
  */
@@ -27,7 +28,7 @@ public class GroundTimeExceedsTwoHoursFilter implements FlightFilter {
                         LocalDateTime departure = segments.get(i + 1).getDepartureDate();
                         totalGroundTime = totalGroundTime.plus(Duration.between(arrival, departure));
                     }
-                    return totalGroundTime.toHours() >= 2;
+                    return !(totalGroundTime.toHours() > 2);
                 })
                 .collect(Collectors.toList());
     }
