@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
+
 public class GroundTimeExceedsTwoHoursFilterTest {
 
     @Test
